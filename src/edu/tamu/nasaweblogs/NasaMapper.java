@@ -22,7 +22,7 @@ public class NasaMapper extends Mapper<LongWritable, Text, IntWritable, IntWrita
 			//Checking Stepwise Parts
 			//for(String word : parts)
 			//	System.out.println(word);
-				if(parts.length <= 4)
+			if(parts.length <= 4)
 			{
 				int hour=Integer.parseInt(parts[1]);
 				final IntWritable hourInt = new IntWritable(hour);
