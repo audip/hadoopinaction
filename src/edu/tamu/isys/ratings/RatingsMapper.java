@@ -23,7 +23,7 @@ public class RatingsMapper extends Mapper<LongWritable, Text, Text, Text>
 			if(!entry.hasError())
 			{
 				newKey = new Text(entry.getGenre());
-				newValue = new Text(entry.getName()+entry.getRating());
+				newValue = new Text(entry.getName()+" "+entry.getRating());
 				context.write(newKey, newValue);
 			}
 		} 
