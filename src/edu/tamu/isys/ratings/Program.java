@@ -1,14 +1,15 @@
 package edu.tamu.isys.ratings;
 
-
-
 /*
  * Author Details:-
  * Author - Aditya Purandare 
  * UIN-724006256
  * 
  * Execution Query:-
+ * bin/hadoop jar 724006256.jar edu.tamu.ratings.Program input output
  * 
+ * For testing with zero reduce tasks,
+ * bin/hadoop jar 724006256.jar edu.tamu.ratings.Program -D mapred.reduce.tasks=0 input output
 */
 
 import org.apache.hadoop.conf.Configuration;
@@ -36,7 +37,7 @@ public class Program extends Configured implements Tool
 	}
 	public int run (String args[]) throws Exception
 	{
-		Job job = Job.getInstance(getConf(), "movieratings");
+		Job job = Job.getInstance(getConf(), "724006256");
 		job.setJarByClass(Program.class);
 		
 		job.setMapperClass(RatingsMapper.class);
