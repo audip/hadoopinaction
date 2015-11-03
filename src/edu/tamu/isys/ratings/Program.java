@@ -6,10 +6,10 @@ package edu.tamu.isys.ratings;
  * UIN-724006256
  * 
  * Execution Query:-
- * bin/hadoop jar 724006256.jar edu.tamu.ratings.Program input output
+ * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program input output
  * 
  * For testing with zero reduce tasks,
- * bin/hadoop jar 724006256.jar edu.tamu.ratings.Program -D mapred.reduce.tasks=0 input output
+ * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program -D mapred.reduce.tasks=0 input output
 */
 
 import org.apache.hadoop.conf.Configuration;
