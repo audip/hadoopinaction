@@ -14,7 +14,7 @@ public class RatingsMapper extends Mapper<LongWritable, Text, Text, Text>
 	private Text newKey;
 	private Text newValue;
 	private String[] genreList;
-	private int loop_var=0;
+	private int loop_var = 0;
 	
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
 	{
@@ -22,13 +22,13 @@ public class RatingsMapper extends Mapper<LongWritable, Text, Text, Text>
 		try 
 		{
 			MovieLogEntry entry = new MovieLogEntry(data);
-			if(!entry.hasError())
+			if(!entry.hasError() && !entry.getRating().isEmpty() && !entry.getGenre().isEmpty() && !entry.getMovieId().isEmpty() && !entry.getName().isEmpty() && !entry.getUserId().isEmpty() && !entry.getUserAge().isEmpty() && !entry.getUserGender().isEmpty())
 			{
 				genreList=entry.getGenres();
 				for(loop_var = 0; loop_var < genreList.length; ++loop_var)
 				{
 					newKey = new Text(genreList[loop_var]);
-					newValue = new Text(entry.getName()+" "+entry.getRating());
+					newValue = new Text(entry.getName()+"::"+entry.getRating());
 					context.write(newKey, newValue);
 				}
 			}
