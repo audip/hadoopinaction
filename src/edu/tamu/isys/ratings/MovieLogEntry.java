@@ -47,6 +47,16 @@ public class MovieLogEntry {
 	{
 		return Genre;
 	}
+	public String[] getGenres()
+	{
+		int loop_var;
+		String[] genreList = Genre.split(",");
+		for(loop_var=0; loop_var < genreList.length; ++loop_var)
+		{
+			genreList[loop_var] = genreList[loop_var].trim();
+		}
+		return genreList;
+	}
 	public String getUserId()
 	{
 		return UserId;
