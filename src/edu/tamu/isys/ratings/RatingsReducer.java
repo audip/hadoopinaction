@@ -1,13 +1,7 @@
 package edu.tamu.isys.ratings;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.hadoop.io.Text;
@@ -16,6 +10,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class RatingsReducer extends Reducer<Text, Text, Text, Text> 
 {
 	private Text newValue;
+	String[] parts;
 	
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{
@@ -24,10 +19,9 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 		String FORMATTER="";
 		
 		Map<String, String> MovieMap = buildMap(values);
-		Map<String, Double> AverageMovieMap = getAverageRating(MovieMap);
-		Map<String, Double> SortedMap = sortByValue(AverageMovieMap);
+		Map<String, Double> AveragedMovieMap = getAverageRating(MovieMap);
 		
-		String[] parts = getLast(SortedMap);
+		parts = getTopMovie(AveragedMovieMap);
 		TopMovieName = parts[0];
 		TopMovieRating = parts[1];
 		
@@ -40,42 +34,32 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 	{
 		String movieName="", movieRating="", countString="", sumString="";
 		String lineText="";
-		String moviecheck="";
-		String[] parts, parter;
+		String[] parter;
 		int countOfRatings=0, sumOfRatings=0;
 		
 		Map<String, String> moviemap = new HashMap<String, String>();
 		
-		//values: Dead Poets Society (1989)::3
 		for(Text value : values)
 		{
 			lineText = value.toString();
-			parts = lineText.split("::");
-			//movieName:Dead Poets Society (1989)
-			//movieRating:3
+			parts = lineText.split("\\::");
+
 			movieName=parts[0];
 			movieRating=parts[1];
-			
-			//System.out.println(movieName+"->"+movieRating);
-			
-			//moviecheck:1/1
-			moviecheck=moviemap.get(movieName);
-			
-			if(moviecheck == null)
+						
+			if(moviemap.containsKey(movieName) == true)
 			{
-				countOfRatings = 1;
-				sumOfRatings = Integer.parseInt(movieRating);
-				//System.out.println("Null MovieCheck: Setting:"+countOfRatings+"/"+sumOfRatings);
+				parter = moviemap.get(movieName).split("/");
+
+				countOfRatings = Integer.parseInt(parter[0]) + 1;
+				sumOfRatings = Integer.parseInt(parter[1]) + Integer.parseInt(movieRating);
 			}
 			else
 			{
-				parter = moviecheck.split("/");
-				/*for(String p : parter)
-					System.out.println(p);*/
-				countOfRatings = Integer.parseInt(parter[0]) + 1;
-				sumOfRatings = Integer.parseInt(parter[1]) + Integer.parseInt(movieRating);
-				//System.out.println("Finite MovieCheck: Setting:"+countOfRatings+"/"+sumOfRatings);
+				countOfRatings = 1;
+				sumOfRatings = Integer.parseInt(movieRating);
 			}
+			
 			countString=Integer.toString(countOfRatings);
 			sumString=Integer.toString(sumOfRatings);
 			moviemap.put(movieName, countString+"/"+sumString);
@@ -86,7 +70,7 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 	private Map <String, Double> getAverageRating(Map <String, String> MovieMap)
 	{
 		String MovieMapValue="";
-		String[] parts;
+		
 		double countOfRatings=0;
 		double sumOfRatings=0;
 		double averageRating=0d;
@@ -96,7 +80,6 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 		for(String key : MovieMap.keySet())
 		{
 			MovieMapValue = MovieMap.get(key);
-			//System.out.println(key+"->"+ MovieMapValue);
 			parts = MovieMapValue.split("/");
 			
 			countOfRatings = Double.parseDouble(parts[0]);
@@ -107,41 +90,29 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 			String s = String.format("%.2f", averageRating);
 			averageRating = Double.parseDouble(s);
 			
-			///System.out.println("Count:"+countOfRatings+"Sum:"+sumOfRatings+"Avg:"+averageRating);
 			averagemoviemap.put(key, averageRating);
 		}
 		return averagemoviemap;
 	}
 	
-	private String[] getLast(Map <String, Double> SortedMap)
+	private String[] getTopMovie(Map <String, Double> AveragedMovieMap)
 	{
 		String[] resultSet={"",""};
-		for(String key : SortedMap.keySet())
+		String TopRatedMovie="";
+		Double TopMovieRating=0d;
+		Double keyValue=0d;
+		
+		for(String key : AveragedMovieMap.keySet())
 		{
-			resultSet[0] = key;
-			resultSet[1] = Double.toString(SortedMap.get(key));
-		}
-		//System.out.println(resultSet[0]+":"+resultSet[1]);
-		return resultSet;
-	}
-	
-	public static Map <String, Double> sortByValue(Map <String, Double> unsortedMap)
-	{	 
-		List<String> list = new LinkedList(unsortedMap.entrySet());
-	 
-		Collections.sort(list, new Comparator() 
-		{
-			public int compare(Object o1, Object o2) 
+			keyValue = AveragedMovieMap.get(key);
+			if(keyValue>TopMovieRating)
 			{
-				return ((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
+				TopRatedMovie=key;
+				TopMovieRating=keyValue;
 			}
-		});
-	 
-		Map sortedMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			sortedMap.put(entry.getKey(), entry.getValue());
 		}
-		return sortedMap;
+		resultSet[0] = TopRatedMovie;
+		resultSet[1] = Double.toString(TopMovieRating);
+		return resultSet;
 	}
 }

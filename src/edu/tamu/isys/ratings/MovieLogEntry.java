@@ -18,7 +18,7 @@ public class MovieLogEntry {
 	{
 		try
 		{
-			String[] parts = rawData.split("::");
+			String[] parts = rawData.split("\\::");
 			this.MovieId = parts[0].trim();
 			this.Name=parts[1].trim();
 			this.Genre=parts[2].trim();
