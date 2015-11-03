@@ -12,7 +12,7 @@ public class MovieLogEntry {
 	private String UserGender= "";
 	private String Rating= "";
 	private String Timestamp= "";
-	private String errormsg = "";
+	private String errorMessage = "";
 	
 	public MovieLogEntry (String rawData) throws ParseException
 	{
@@ -30,8 +30,8 @@ public class MovieLogEntry {
 		}
 		catch (Exception e)
 		{
-			errormsg = e.getStackTrace().toString()+":"+rawData;
-			System.out.println(errormsg);
+			errorMessage = e.getStackTrace().toString()+":"+rawData;
+			System.out.println(errorMessage);
 		}
 	}
 	
@@ -79,10 +79,10 @@ public class MovieLogEntry {
 	}
 	public String getError()
 	{
-		return errormsg;
+		return errorMessage;
 	}
 	public boolean hasError()
 	{
-		return !errormsg.isEmpty();
+		return !errorMessage.isEmpty();
 	}
 }

@@ -37,7 +37,7 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 		String[] parter;
 		int countOfRatings=0, sumOfRatings=0;
 		
-		Map<String, String> moviemap = new HashMap<String, String>();
+		Map<String, String> movieMap = new HashMap<String, String>();
 		
 		for(Text value : values)
 		{
@@ -47,9 +47,9 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 			movieName=parts[0];
 			movieRating=parts[1];
 						
-			if(moviemap.containsKey(movieName) == true)
+			if(movieMap.containsKey(movieName) == true)
 			{
-				parter = moviemap.get(movieName).split("/");
+				parter = movieMap.get(movieName).split("/");
 
 				countOfRatings = Integer.parseInt(parter[0]) + 1;
 				sumOfRatings = Integer.parseInt(parter[1]) + Integer.parseInt(movieRating);
@@ -62,57 +62,58 @@ public class RatingsReducer extends Reducer<Text, Text, Text, Text>
 			
 			countString=Integer.toString(countOfRatings);
 			sumString=Integer.toString(sumOfRatings);
-			moviemap.put(movieName, countString+"/"+sumString);
+			movieMap.put(movieName, countString+"/"+sumString);
 		}
-		return moviemap;
+		return movieMap;
 	}
 	
-	private Map <String, Double> getAverageRating(Map <String, String> MovieMap)
+	private Map <String, Double> getAverageRating(Map <String, String> movieMap)
 	{
-		String MovieMapValue="";
+		String movieMapValue="";
+		String doublePrecisionString="";
 		
 		double countOfRatings=0;
 		double sumOfRatings=0;
 		double averageRating=0d;
 				
-		Map <String, Double> averagemoviemap = new HashMap <String, Double>();
+		Map <String, Double> averageMovieMap = new HashMap <String, Double>();
 		
-		for(String key : MovieMap.keySet())
+		for(String key : movieMap.keySet())
 		{
-			MovieMapValue = MovieMap.get(key);
-			parts = MovieMapValue.split("/");
+			movieMapValue = movieMap.get(key);
+			parts = movieMapValue.split("/");
 			
 			countOfRatings = Double.parseDouble(parts[0]);
 			sumOfRatings = Double.parseDouble(parts[1]);
 			
 			averageRating = sumOfRatings/countOfRatings; 
 			
-			String s = String.format("%.2f", averageRating);
-			averageRating = Double.parseDouble(s);
+			doublePrecisionString = String.format("%.2f", averageRating);
+			averageRating = Double.parseDouble(doublePrecisionString);
 			
-			averagemoviemap.put(key, averageRating);
+			averageMovieMap.put(key, averageRating);
 		}
-		return averagemoviemap;
+		return averageMovieMap;
 	}
 	
-	private String[] getTopMovie(Map <String, Double> AveragedMovieMap)
+	private String[] getTopMovie(Map <String, Double> averagedMovieMap)
 	{
 		String[] resultSet={"",""};
-		String TopRatedMovie="";
-		Double TopMovieRating=0d;
+		String topRatedMovie="";
+		Double topMovieRating=0d;
 		Double keyValue=0d;
 		
-		for(String key : AveragedMovieMap.keySet())
+		for(String key : averagedMovieMap.keySet())
 		{
-			keyValue = AveragedMovieMap.get(key);
-			if(keyValue>TopMovieRating)
+			keyValue = averagedMovieMap.get(key);
+			if(keyValue>topMovieRating)
 			{
-				TopRatedMovie=key;
-				TopMovieRating=keyValue;
+				topRatedMovie=key;
+				topMovieRating=keyValue;
 			}
 		}
-		resultSet[0] = TopRatedMovie;
-		resultSet[1] = Double.toString(TopMovieRating);
+		resultSet[0] = topRatedMovie;
+		resultSet[1] = Double.toString(topMovieRating);
 		return resultSet;
 	}
 }
