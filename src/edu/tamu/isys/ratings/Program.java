@@ -8,8 +8,12 @@ package edu.tamu.isys.ratings;
  * Execution Query:-
  * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program input output
  * 
- * For testing with zero reduce tasks,
+ * For mapper testing with zero reduce tasks,
  * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program -D mapred.reduce.tasks=0 input output
+ * Test successful - 11/02/2015 6:26pm [Desired output achieved]
+ * 
+ * Build History
+ * Program Code Complete - 11/02/2015 8:29pm
 */
 
 import org.apache.hadoop.conf.Configuration;
