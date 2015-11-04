@@ -2,12 +2,15 @@ package edu.tamu.isys.ratings;
 
 /*
  * Author Details:-
- * Author - Aditya Purandare 
- * UIN-724006256
+ * Name - Aditya Purandare 
+ * UIN - 724006256
  * Program - MS-Management Information Systems
  * Course - ISYS 622 Advanced Database Management Systems
  * Section - 603
  * Email - adityapurandare@tamu.edu
+ * 
+ * Git maintained at BitBucket.com (http://bitbucket.org/audi93/movieratings/) privately to keep 
+ * track of versions & have backups of code at every step
  * 
  * Execution Query:-
  * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program input output
@@ -15,13 +18,22 @@ package edu.tamu.isys.ratings;
  * 
  * Mapper Result Testing with zero reduce tasks,
  * bin/hadoop jar 724006256.jar edu.tamu.isys.ratings.Program -D mapred.reduce.tasks=0 input output
- * Test successful - 11/02/2015 6:26pm
+ * Test Successful - 11/02/2015 6:26pm
  * 
- * Build History
+ * Build History:-
  * Program Code Complete - 11/02/2015 8:29pm
  * Program optimized - 11/03/2015 10:14am
+ * Program documented - 11/03/2015 03:03pm
+ * 
+ * Specification Check:-
+ * Correctness Check - 11/03/2015
+ * Robustness Check - 11/03/2015
+ * Efficiency Check - 11/03/2015
+ * Readability Check - 11/03/2015 06:10pm
+ * Documentation Check - 11/03/2015 06:24pm
 */
 
+/* Imports have been organised for Program Class */
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -45,7 +57,7 @@ public class Program extends Configured implements Tool
 		
 		int res = ToolRunner.run(new Configuration(), new Program(), args);
 		
-		/* System exits after posting console message of exit code informing user of the outcome */ 
+		/* System exits after posting console message of exit code informing user of the outcome of program*/ 
 		System.out.println("Program ending with exit code: "+res);
 		System.exit(res);
 	}
